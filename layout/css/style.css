@@ -1,0 +1,41 @@
+:root {
+  --pop-color: #007bff;
+  }
+
+@font-face{font-family:'logo'; src:url(../fonts/font/MeriendaOne-Regular.ttf);}
+@font-face{font-family:'pop'; src:url(../fonts/font/Poppins-Regular.ttf);}
+@font-face{font-family:'balo'; src:url(../fonts/font/BalooChettan.ttf);}
+@font-face{font-family:'jose'; src:url(../fonts/font/JosefinSans.ttf);}
+@font-face{font-family:'tenor'; src:url(../fonts/font/TenorSans-Regular.ttf);}
+
+*{
+    box-sizing: border-box;
+}
+body{
+    margin: 0;
+    padding: 0;
+/*    background-color: #f4f4f4;*/
+   
+}
+section{
+    padding: 40px 0;
+    position: relative;
+}
+a:hover{text-decoration: none;}
+
+
+.owl-theme .owl-nav {
+    position: absolute;
+    font-weight: 100;
+}
+.owl-theme .owl-nav [class*=owl-]:hover{
+    background: none;
+    color: #000;
+}
+button:focus{outline: 0;}
+
+
+
+/***************************** Home Page******************************/
+
+/********** baner ***************/
