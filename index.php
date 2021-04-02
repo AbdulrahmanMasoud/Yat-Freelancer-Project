@@ -1,16 +1,18 @@
 
 
   <?php 
-session_start();
-   include 'init.php'; 
-   if(isset($_SESSION['email']) && $_SESSION['type'] == 'freelancer'){
-      echo "Welcome Freelancer";
-   }else{
-      header('Location:login.php');
-   }
+// session_start();
+//    include 'init.php'; 
+//    if(isset($_SESSION['email']) && $_SESSION['type'] == 'freelancer'){
+//       echo "Welcome Freelancer";
+//    }else if(isset($_SESSION['email']) && $_SESSION['type'] == 'client'){
+//       echo "Welcome Client";
+//    }else{
+//       header('Location:login.php');
+//    }
 
 ?>
-<?php if(isset($_SESSION['email']) && $_SESSION['type'] == 'client'): ?>
+
  <!-- Carousel Start -->
         <div class="carousel">
             <div class="container-fluid">
@@ -633,7 +635,18 @@ session_start();
         <!-- Footer End -->
 
         <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
-<?php endif; ?>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
