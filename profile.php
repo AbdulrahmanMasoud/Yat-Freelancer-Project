@@ -1,15 +1,19 @@
 <?php 
 session_start();
    include 'init.php'; 
+   // Get User Data
    if(isset($_SESSION['email']) && $_SESSION['type'] == 'freelancer'){
+     // Get Data If This User Is Freelancer
     $userData = $con->prepare("SELECT * FROM freelancer WHERE id = ?");
     $userData->execute(array($_SESSION['userID']));
     $data = $userData->fetch();
    }else if(isset($_SESSION['email']) && $_SESSION['type'] == 'client'){
+     // Get Data If This User Is Client
     $userData = $con->prepare("SELECT * FROM clients WHERE id = ?");
     $userData->execute(array($_SESSION['userID']));
     $data = $userData->fetch();
    }else{
+     // If Not Reirect To Login
       header('Location:login.php');
    }
    
@@ -26,8 +30,14 @@ session_start();
                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                     <div class="mt-3">
                       <h4><?php echo $data['first_name'] . ' '.$data['last_name'] ; ?></h4>
+                      <?php if($_SESSION['type'] == 'freelancer'): ?>
                       <p class="text-secondary mb-1"><?php echo $data['bio']; ?></p>
                       <p class="text-muted font-size-sm"><?php echo $data['country'] .' , ' .$data['city'] . ' , ' . $data['address'] ; ?></p>
+                      <?php elseif($_SESSION['type'] == 'client'): ?>
+                        <p class="text-secondary mb-1"><?php echo $data['company']; ?></p>
+                        <p class="text-muted font-size-sm"><?php echo $data['country'] .' , ' .$data['city'] ?></p>
+                      <?php endif; ?>
+                      
                       <a href="edit_profile.php" class="btn btn-outline-primary">Edit Profile</a>
                     </div>
                   </div>
@@ -35,7 +45,8 @@ session_start();
               </div>
 
 
-
+<!-- ---------------------------------------- -->
+<!-- For Freelancer To See Skills -->
 <?php if($_SESSION['type'] == 'freelancer'):?>
               <div class="card mt-3">
                 <ul class="list-group list-group-flush">
@@ -88,8 +99,11 @@ session_start();
   </div>
 </div>
 <?php endif; ?>
+<!-- ---------------------------------------- -->
 
-<?php if($_SESSION['type'] == 'cilents'):?>
+<!-- ---------------------------------------- -->
+<!-- For Client To See Contracts -->
+<?php if($_SESSION['type'] == 'client'):?>
               <div class="card mt-3">
                 <ul class="list-group list-group-flush">
                    <b class="m-3">Your Contracts</b>
@@ -105,8 +119,9 @@ session_start();
                 </ul>
               </div>
 <?php endif; ?>
+<!-- ----------------------------------------- -->
 </div>
-
+<!-- Fech Data For Profile If It Freelancer Or Client Debend $data Var -->
             <div class="col-md-8">
               <div class="card mb-3">
                 <div class="card-body">
@@ -152,11 +167,18 @@ session_start();
                       <h6 class="mb-0">Address</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                    <?php echo $data['country'] .' / ' .$data['city'] . ' / ' . $data['address'] ; ?>
+                    <?php 
+                    if($_SESSION['type'] == 'freelancer'){
+                    echo $data['country'] .' / ' .$data['city'] . ' / ' . $data['address'];
+                    }elseif($_SESSION['type'] == 'client'){
+                      echo $data['country'] .' / ' .$data['city'];
+                    }
+                    ?>
                     </div>
                   </div>
                 </div>
               </div>
+<!-- -------------------------------------------------------------- -->
               <div class="row gutters-sm">
                 <div class="col-sm-6 mb-3">
                   <div class="card h-100">
@@ -185,6 +207,8 @@ session_start();
                     </div>
                   </div>
                 </div>
+
+
                 <div class="col-sm-6 mb-3">
                   <div class="card h-100">
                     <div class="card-body">

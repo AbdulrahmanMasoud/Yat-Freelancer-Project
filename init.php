@@ -11,7 +11,7 @@ $func = 'inc/functions/';
 // Important Files
 include $func . 'functions.php';
 include  $tpl . 'header.php'; 
-// include  $tpl . 'navbar.php';
+include  $tpl . 'navbar.php';
  
 
 
