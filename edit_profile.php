@@ -15,6 +15,65 @@ session_start();
       header('Location:login.php');
    }
    
+
+$errors = [];
+$success = [];
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    if(isset($_POST['update'])){
+        $f_name = $_POST['f_name'];
+        $l_name = $_POST['l_name'];
+        $email = $_POST['email'];
+        $pass = $_POST['pass'];
+        $phone = $_POST['phone'];
+        $country = $_POST['country'];
+        $city = $_POST['city'];
+          $bio = $_POST['bio'];
+          $address = $_POST['address'];
+        $company = $_POST['company']; // For Client
+        // Validation First Name
+        if(isset($f_name)){
+            $clenFName = filter_var($f_name, FILTER_SANITIZE_STRING);
+            if(strlen($clenFName) < 4){
+                $errors[] = 'First Name Is Short';
+            }
+        }
+        // Validation Last Name
+        if(isset($l_name)){
+            $clenLName = filter_var($l_name, FILTER_SANITIZE_STRING);
+            if(strlen($clenLName) < 4){
+                $errors[] = 'Last Name Is Short';
+            }
+        }
+        // Validation Email Name
+        if(isset($email)){
+            $clenEmail = filter_var($email, FILTER_SANITIZE_EMAIL);
+            if(filter_var($email, FILTER_SANITIZE_EMAIL) == false){
+                $errors[] = 'Please Write Valid Email';
+            }
+        }
+        // Validation Password Name
+        if(isset($pass)){
+            if(strlen($pass) < 6){
+                $errors[] = 'Password Must Be More 6 Characters';
+            }
+        }
+
+        if(empty($errors) && $_SESSION['type'] == 'freelancer'){
+          $userUpdate = $con->prepare("UPDATE  freelancer SET first_name = ?, last_name = ?, email = ? , `password` = ?,phone = ? , country = ?, city = ?, `address` = ?, bio = ? WHERE id = ?");
+          $userUpdate->execute(array($f_name,$l_name,$email,sha1($pass),$phone,$country,$city,$address,$bio,$_SESSION['userID']));
+          header('Location:profile.php');
+        }elseif(empty($errors) && $_SESSION['type'] == 'client'){
+          $userUpdate = $con->prepare("UPDATE  clients SET first_name = ?, last_name = ?, email = ? , `password` = ?,phone = ? , country = ?, city = ?,company = ? WHERE id = ?");
+          $userUpdate->execute(array($f_name,$l_name,$email,sha1($pass),$phone,$country,$city,$company,$_SESSION['userID']));
+          header('Location:profile.php');
+        }
+        if(!empty($errors)){
+            foreach($errors as $err){
+                echo '<div class="alert alert-danger mt-2" role="alert">'.$err.'</div>';
+            }
+        }
+    }
+  }
 ?>
 <section class="profile">
 <div class="container">
@@ -28,9 +87,14 @@ session_start();
                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                     <div class="mt-3">
                       <h4><?php echo $data['first_name'] . ' '.$data['last_name'] ; ?></h4>
+                      <?php if($_SESSION['type'] == 'freelancer'): ?>
                       <p class="text-secondary mb-1"><?php echo $data['bio']; ?></p>
                       <p class="text-muted font-size-sm"><?php echo $data['country'] .' , ' .$data['city'] . ' , ' . $data['address'] ; ?></p>
-                      <a href="edit_profile.php" class="btn btn-outline-primary">Edit Profile</a>
+                      <?php elseif($_SESSION['type'] == 'client'): ?>
+                        <p class="text-secondary mb-1"><?php echo $data['company']; ?></p>
+                        <p class="text-muted font-size-sm"><?php echo $data['country'] .' , ' .$data['city'] ?></p>
+                      <?php endif; ?>
+                      <a href="profile.php" class="btn btn-outline-primary">View Profile</a>
                     </div>
                   </div>
                 </div>
@@ -94,7 +158,7 @@ session_start();
 </div>
 <?php endif; ?>
 
-<?php if($_SESSION['type'] == 'cilents'):?>
+<?php if($_SESSION['type'] == 'client'):?>
               <div class="card mt-3">
                 <ul class="list-group list-group-flush">
                    <b class="m-3">Your Contracts</b>
@@ -112,8 +176,10 @@ session_start();
 <?php endif; ?>
 </div>
 
-            <div class="col-md-8">
-            <form action="">
+          <div class="col-md-8">
+         
+          
+            <form action="<?php echo $_SERVER['PHP_SELF']?>" method="POST">
               <div class="card mb-3">
                 <div class="card-body">
                   <div class="row">
@@ -121,7 +187,7 @@ session_start();
                       <h6 class="mb-0">First Name</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                    <input type="email" class="form-control" value="<?php echo $data['first_name']; ?>">
+                    <input name="f_name" type="text" class="form-control" value="<?php echo $data['first_name']; ?>">
                       
                     </div>
                   </div>
@@ -131,7 +197,7 @@ session_start();
                       <h6 class="mb-0">Last Name</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                    <input type="email" class="form-control" value="<?php echo $data['last_name']; ?>">
+                    <input name="l_name" type="text" class="form-control" value="<?php echo $data['last_name']; ?>">
                     </div>
                   </div>
 
@@ -141,7 +207,7 @@ session_start();
                       <h6 class="mb-0">Email</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                    <input type="email" class="form-control" value="<?php echo $data['email']; ?>">
+                    <input name="email"  type="email" class="form-control" value="<?php echo $data['email']; ?>">
                     </div>
                   </div>
                   <hr>
@@ -150,7 +216,7 @@ session_start();
                       <h6 class="mb-0">Password</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                    <input type="password" class="form-control" value="<?php echo $data['password']; ?>">
+                    <input name="pass" type="password" class="form-control" value="<?php echo sha1($data['password']); ?>">
                     </div>
                   </div>
                   <hr>
@@ -159,7 +225,7 @@ session_start();
                       <h6 class="mb-0">Phone</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                    <input type="text" class="form-control" value="<?php echo $data['phone']; ?>">
+                    <input name="phone" type="text" class="form-control" value="<?php echo $data['phone']; ?>">
                     </div>
                   </div>
                   <hr>
@@ -168,7 +234,7 @@ session_start();
                       <h6 class="mb-0">Country</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                    <input type="text" class="form-control" value="<?php echo $data['country']; ?>">
+                    <input name="country" type="text" class="form-control" value="<?php echo $data['country']; ?>">
                     </div>
                   </div>
                   <hr>
@@ -177,16 +243,17 @@ session_start();
                       <h6 class="mb-0">City</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                    <input type="text" class="form-control" value="<?php echo $data['city']; ?>">
+                    <input name="city" type="text" class="form-control" value="<?php echo $data['city']; ?>">
                     </div>
                   </div>
+                  <?php if($_SESSION['type'] == 'freelancer'): ?>
                   <hr>
                   <div class="row">
                     <div class="col-sm-3">
                       <h6 class="mb-0">Address</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                    <input type="text" class="form-control" value="<?php echo $data['address']; ?>">
+                    <input name="address" type="text" class="form-control" value="<?php echo $data['address']; ?>">
                     </div>
                   </div>
                   <hr>
@@ -195,15 +262,28 @@ session_start();
                       <h6 class="mb-0">Bio</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                    <textarea name="" class="form-control"><?php echo $data['bio']; ?></textarea>
+                    <textarea name="bio" class="form-control"><?php echo $data['bio']; ?></textarea>
                     </div>
                   </div>
+                  <?php endif; ?>
+                  <?php if($_SESSION['type'] == 'client'): ?>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Company</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                    <input name="company" type="text" class="form-control" value="<?php echo $data['company']; ?>">
+                    </div>
+                  </div>
+                  <?php endif; ?>
                 </div>
               </div>
               <div class="row gutters-sm">
-              <input type="submit" class="form-control btn btn-success"  value="Update Profile">
+              <input name="update" type="submit" class="form-control btn btn-success"  value="Update Profile">
               </div>
               </form>
+          
             </div>
             
           </div>
