@@ -1,5 +1,7 @@
 <?php 
+$title = 'Register';
 include 'init.php'; 
+
 ?>
 
 <section class="register">

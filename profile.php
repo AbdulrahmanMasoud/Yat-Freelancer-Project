@@ -1,6 +1,8 @@
 <?php 
-session_start();
+// session_start();
+$title = 'Profile';
    include 'init.php'; 
+   
    // Get User Data
    if(isset($_SESSION['email']) && $_SESSION['type'] == 'freelancer'){
      // Get Data If This User Is Freelancer

@@ -1,6 +1,8 @@
+<?php ob_start();//if(isset($_SESSION['user'])):?>
 <?php 
 
-session_start();
+// session_start();
+$title = 'Login';
 include 'init.php'; 
 
 if(isset($_SESSION['email'])){
@@ -157,3 +159,4 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 </section>
 
 <?php include  $tpl . 'footer.php'; ?>
+<?php ob_end_flush(); ?>
