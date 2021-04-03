@@ -1,6 +1,7 @@
 
 
   <?php 
+  include 'init.php'; 
 // session_start();
 //    include 'init.php'; 
 //    if(isset($_SESSION['email']) && $_SESSION['type'] == 'freelancer'){

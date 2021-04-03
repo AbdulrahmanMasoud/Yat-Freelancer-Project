@@ -16,14 +16,14 @@ if(isset($_SESSION['email'])){
 <div class="d-flex" id="wrapper">
 <!-- Sidebar -->
 <div class="bg-light border-right" id="sidebar-wrapper">
-<div class="sidebar-heading pt-5 pb-4">LOGIN WITH<strong style = "color:#28a745;"> ARR</strong></div>
+<div class="sidebar-heading pt-5 pb-4">LOGIN WITH<strong style = "color:#40a7f3;"> ARR</strong></div>
 <div class="list-group list-group-flush"> 
     <a data-toggle="tab" href="#menu1" id="tab1" class="tabs list-group-item bg-light">
         <div class="list-div my-2">
         <i class="fas fa-sign-in-alt"></i> Login As Client
         </div>
     </a> 
-    <a data-toggle="tab" href="#menu2" id="tab2" class="tabs list-group-item active1">
+    <a data-toggle="tab" href="#menu2" id="tab2" class="tabs list-group-item">
         <div class="list-div my-2">
         <i class="fas fa-sign-in-alt"></i> Login As Freelancer
         </div>

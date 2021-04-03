@@ -19,10 +19,9 @@
                     <div class="col-md-4">
                         <div class="top-bar-right">
                             <div class="social">
-                                <a href=""><i class="fab fa-twitter"></i></a>
-                                <a href=""><i class="fab fa-facebook-f"></i></a>
-                                <a href=""><i class="fab fa-linkedin-in"></i></a>
-                                <a href=""><i class="fab fa-instagram"></i></a>
+                                <a href="login.php"><i class="fas fa-sign-in-alt"></i></a>
+                                <a href="register.php"><i class="fas fa-user-plus"></i></i></a>
+                                
                             </div>
                         </div>
                     </div>
@@ -42,16 +41,34 @@
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav ml-auto">
                         <a href="index.html" class="nav-item nav-link active">Home</a>
+                        <a href="advisor.html" class="nav-item nav-link">Jobs</a>
                         <a href="about.html" class="nav-item nav-link">About</a>
-                        <a href="service.html" class="nav-item nav-link">Service</a>
-                        <a href="feature.html" class="nav-item nav-link">Feature</a>
-                        <a href="advisor.html" class="nav-item nav-link">Advisor</a>
-                        <a href="review.html" class="nav-item nav-link">Review</a>
+                        <a href="review.html" class="nav-item nav-link">Contact</a>
+                        <?php 
+                        
+                        session_start();
+                           // Get User Data
+                        if(isset($_SESSION['email']) && $_SESSION['type'] == 'freelancer'){
+                            // Get Data If This User Is Freelancer
+                        $userData = $con->prepare("SELECT 'id', 'first_name','last_name' FROM freelancer WHERE id = ?");
+                        $userData->execute(array($_SESSION['userID']));
+                        $data = $userData->fetch();
+                        }else if(isset($_SESSION['email']) && $_SESSION['type'] == 'client'){
+                            // Get Data If This User Is Client
+                        $userData = $con->prepare("SELECT 'id', 'first_name','last_name' FROM clients WHERE id = ?");
+                        $userData->execute(array($_SESSION['userID']));
+                        $data = $userData->fetch();
+                        }else{
+                            // If Not Reirect To Login
+                            header('Location:login.php');
+                        }
+                        
+                        ?>
                         <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><?php echo $data['first_name'].' '. $data['last_name']; ?></a>
                             <div class="dropdown-menu">
-                                <a href="blog.html" class="dropdown-item">Blog Page</a>
-                                <a href="single.html" class="dropdown-item">Single Page</a>
+                                <a href="profile.php" class="dropdown-item">Profile</a>
+                                <a href="logout.php" class="dropdown-item">Logout</a>
                             </div>
                         </div>
                         <a href="contact.html" class="nav-item nav-link">Contact</a>
