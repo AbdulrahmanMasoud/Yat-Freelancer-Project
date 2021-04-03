@@ -28,7 +28,7 @@ $jobs = $stmtAllJobs->fetchAll();
 										<li><?php echo $job['badget'] ?></li>
 										</ul>
 										<ul class="job-social tr-list">
-											<li><a href="jobid=<?php echo $job['id']?>"><i class="fas fa-arrow-right"></i></a></li>
+											<li><a href="job.php?jobid=<?php echo $job['id']?>"><i class="fas fa-arrow-right"></i></a></li>
 										</ul>
 									</div>										
 								</div>

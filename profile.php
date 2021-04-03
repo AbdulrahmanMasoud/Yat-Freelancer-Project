@@ -9,6 +9,25 @@ $title = 'Profile';
     $userData = $con->prepare("SELECT * FROM freelancer WHERE id = ?");
     $userData->execute(array($_SESSION['userID']));
     $data = $userData->fetch();
+
+    /************************** */
+    $userProposel = $con->prepare("SELECT * FROM proposal WHERE freelancer_id = ?");
+    $userProposel->execute(array($_SESSION['userID']));
+    $proposels = $userProposel->fetchAll();
+    /*********************************** */
+    $stmtSkills = $con->prepare("SELECT * FROM skills");
+    $stmtSkills->execute();
+    $skills = $stmtSkills->fetchAll();
+
+    /******************************* */
+    // $userSkills = $con->prepare("SELECT * FROM user_skill WHERE `user_id` = ?");
+    $userSkills = $con->prepare("SELECT user_skill.*,skills.skill
+ FROM user_skill 
+ INNER JOIN skills ON skills.id = user_skill.skill_id WHERE `user_id`= ?");
+    $userSkills->execute(array($_SESSION['userID']));
+    $fSkills = $userSkills->fetchAll();
+
+
    }else if(isset($_SESSION['email']) && $_SESSION['type'] == 'client'){
      // Get Data If This User Is Client
     $userData = $con->prepare("SELECT * FROM clients WHERE id = ?");
@@ -49,7 +68,11 @@ $title = 'Profile';
 
 <!-- ---------------------------------------- -->
 <!-- For Freelancer To See Skills -->
-<?php if($_SESSION['type'] == 'freelancer'):?>
+<?php if($_SESSION['type'] == 'freelancer'):
+  
+  
+  
+  ?>
               <div class="card mt-3">
                 <ul class="list-group list-group-flush">
                 <li class="list-group-item ">
@@ -58,22 +81,12 @@ $title = 'Profile';
                         <div class="col-6"><a class="btn btn-info float-right" data-toggle="modal" data-target="#addSkill">Add Skill</a></div>
                     </div>
                   </li>
-               
+               <?php foreach($fSkills as $fskill): ?>
                   <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 class="mb-0">HTML</h6>
+                    <h6 class="mb-0"><?php echo $fskill['skill'] ?></h6>
                   </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 class="mb-0">CSS</h6>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 class="mb-0">Javascript</h6>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 class="mb-0">PHP</h6>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 class="mb-0">Mysql</h6>
-                  </li>
+                <?php endforeach; ?>
+                 
                 </ul>
               </div>
 
@@ -86,15 +99,43 @@ $title = 'Profile';
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-    <form>
+<?php
+
+$errors = [];
+$success = [];
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+###########################################################################
+//For Freelancer
+###########################################################################
+    if(isset($_POST['add_skill'])){
+        $skills = $_POST['skills'];
+        $skill = $_POST['skill'];
+
+       
+        if(empty($errors)){
+            $stmtskill = $con->prepare("INSERT INTO  user_skill(skill_id,`user_id`) 
+                                                 VALUES(?, ?)");
+                $stmtskill->execute(array($skills,$_SESSION['userID']));
+                header('Location:profile.php');
+        }
+        
+
+    }}
+?>
+    <form action="<?php echo $_SERVER['PHP_SELF']?>" method="POST">
         <div class="modal-body">
             <div class="form-group">
                 <label for="exampleInputEmail1">New Skill</label>
-                <input type="text" class="form-control">
+                <select class="form-control form-control-lg" name="skills">
+                <option>--</option>
+                  <?php foreach($skills as $skill): ?>
+                  <option name="<?php echo $skill['skill'] ?>" value="<?php echo $skill['id'] ?>"><?php echo $skill['skill'] ?></option>
+                  <?php endforeach; ?>
+                </select>
             </div>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button name="add_skill" type="submit" class="btn btn-primary">Save</button>
         </div>
     </form>
     </div>
@@ -185,27 +226,13 @@ $title = 'Profile';
                 <div class="col-sm-6 mb-3">
                   <div class="card h-100">
                     <div class="card-body">
-                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Your Contracts</i></h6>
-                      <small>Web Design</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Website Markup</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>One Page</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Mobile Template</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Backend API</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
+                      <h6 class="d-flex align-items-center mb-3">Your Proposels</h6>
+                      <ul class="list-group list-group-flush">
+                        <?php  foreach($proposels as $proposel): ?>
+                      <li class="list-group-item"><?php echo $proposel['coverletter'] ?></li>
+                      <?php endforeach; ?>
+                      </ul>
+                      
                     </div>
                   </div>
                 </div>

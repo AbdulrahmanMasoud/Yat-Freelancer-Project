@@ -1,7 +1,9 @@
 <?php 
 $title = 'Register';
 include 'init.php'; 
-
+if(isset($_SESSION['email'])){
+    header("Location: index.php");
+}
 ?>
 
 <section class="register">

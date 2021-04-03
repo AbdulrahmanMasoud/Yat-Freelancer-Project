@@ -40,12 +40,15 @@
                                     <a class="btn" href="add_job.php"><i class="fas fa-crosshairs"></i> Post Job</a>
                                     
                                     <?php
-                                   }else{
+                                   }else if(isset($_SESSION['email']) && $_SESSION['type'] == 'freelancer'){
                                       ?>
-                                      <a class="btn" href="register.php"><i class="fas fa-user-plus"></i> Register</a>
-                                      <a class="btn" href="login.php"><i class="fas fa-sign-in-alt"></i> Login</a>
-                                
+                                      <a class="btn" href="jobs.php"><i class="fas fa-eye"></i> See All Jobs</a>
                                       <?php
+                                   }else{
+                                       ?>
+                                        <a class="btn" href="register.php"><i class="fas fa-user-plus"></i> Register</a>
+                                        <a class="btn" href="login.php"><i class="fas fa-user-plus"></i> Login</a>
+                                       <?php
                                    }
                                 ?>
                             </div>
