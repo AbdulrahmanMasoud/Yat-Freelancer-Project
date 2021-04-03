@@ -5,10 +5,10 @@
 
 .login,.register {
     overflow-x: hidden;
-    height: 100vh;
+    
     background: #000000
 }
-
+.login{height: 100vh; }
 #bg-div {
     margin: 0;
     margin-top: 100px;
@@ -31,10 +31,10 @@
     background-color: #FFECB3
 }
 
-.active1 {
-    color: #00C853 !important;
+/* .active1 {
+    color: #40a7f3 !important;
     font-weight: bold
-}
+} */
 
 .bar4 {
     width: 35px;
@@ -92,7 +92,7 @@
 .list-group-item.active {
     z-index: 2;
     color: #fff;
-    background-color: #fff !important;
+    background-color: #2196f3 !important;
     border-color: #fff !important
 }
 
@@ -154,6 +154,7 @@ margin-top: 50px;
 input.btn-success {
     height: 50px;
     color: #ffffff;
+    background-color: #40a7f3;
     opacity: 0.9
 }
 
@@ -395,7 +396,7 @@ a:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 35px;
+    width: 150px;
     height: 100%;
     font-size: 16px;
     color: #ffffff;

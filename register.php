@@ -17,7 +17,7 @@ include 'init.php';
         <i class="fas fa-sign-in-alt"></i> Sign UP As Client
         </div>
     </a> 
-    <a data-toggle="tab" href="#menu2" id="tab2" class="tabs list-group-item active1">
+    <a data-toggle="tab" href="#menu2" id="tab2" class="tabs list-group-item">
         <div class="list-div my-2">
         <i class="fas fa-sign-in-alt"></i> Sign UP As Freelancer
         </div>
