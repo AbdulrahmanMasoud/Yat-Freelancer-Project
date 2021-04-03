@@ -2,13 +2,13 @@
 $title = "Add Job";
  include 'init.php';
 
- if(isset($_SESSION['email']) && $_SESSION['type'] == 'client'){
-    $userData = $con->prepare("SELECT * FROM clients WHERE id = ?");
-    $userData->execute(array($_SESSION['userID']));
-    $data = $userData->fetch();
-   }else{
-      header('Location:index.php');
-   }
+//  if(isset($_SESSION['email']) && $_SESSION['type'] == 'client'){
+//     $userData = $con->prepare("SELECT * FROM clients WHERE id = ?");
+//     $userData->execute(array($_SESSION['userID']));
+//     $data = $userData->fetch();
+//    }else{
+//       header('Location:index.php');
+//    }
 
 
 
