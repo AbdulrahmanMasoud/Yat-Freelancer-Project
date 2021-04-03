@@ -1,7 +1,7 @@
-<a href="logout.php">Logout</a>
-<?php 
 
-session_start();
+<?php 
+$title = "Edit Profile";
+// session_start();
    include 'init.php'; 
    if(isset($_SESSION['email']) && $_SESSION['type'] == 'freelancer'){
     $userData = $con->prepare("SELECT * FROM freelancer WHERE id = ?");
